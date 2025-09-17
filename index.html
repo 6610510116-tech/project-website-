@@ -1,9 +1,227 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>My First Website</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bootstrap Sign-In Modal</title>
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: radial-gradient(1200px 600px at 80% -10%, #d3dbec 0, transparent 60%),
+                  radial-gradient(800px 400px at 10% 110%,#2b4b4c 0, transparent 60%),
+                  linear-gradient(180deg, #d3dbec, #2b4b4c);
+      color: #e0e4ed;
+    }
+    body {
+      min-height: 100vh;
+      background: 
+      url("https://example.com/watermark.png") no-repeat center/40%,
+      radial-gradient(1200px 600px at 80% -10%, #d3dbec 0, transparent 60%),
+      radial-gradient(800px 400px at 10% 110%, #2b4b4c 0, transparent 60%),
+      linear-gradient(180deg, #d3dbec, #2b4b4c);
+      color: #e0e4ed;
+   }
+
+
+    .glass {
+      background: rgba(1, 13, 28, 0.06);
+      border: 1px solid rgba(5, 17, 59, 0.15);
+      box-shadow: 0 10px 30px rgba(3, 14, 30, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .brand-badge {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #4a65a9, #054752);
+      border-radius: 12px;
+    }
+    .form-floating > label { color: #6b7280; }
+  </style>
 </head>
 <body>
-    <h1>Hello World!</h1>
+  <header class="py-3">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+          <span class="brand-badge d-inline-block"></span>
+          <span class="fw-semibold">Acme App</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="nav" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item">
+              <button class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#signinModal">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-5">
+    <div class="row align-items-center justify-content-between g-4">
+      <div class="col-lg-6">
+        <div class="p-4 p-lg-5 rounded-4 glass">
+          <h1 class="display-5 fw-bold text-white">Welcome back</h1>
+          <p class="lead mb-4">A sleek starter page with a Bootstrap sign‑in modal. Use this as a foundation for your app.</p>
+          <div class="d-flex gap-3">
+            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#signinModal">Sign in</button>
+            <a href="#learn" class="btn btn-outline-light btn-lg">Learn more</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="p-4 rounded-4 glass">
+          <h5 class="text-uppercase text-white-50 mb-3">Why Acme?</h5>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex align-items-start gap-3 mb-3">
+              <span class="badge bg-primary-subtle text-primary-emphasis rounded-3 p-3"><i class="bi bi-speedometer2"></i></span>
+              <div>
+                <div class="fw-semibold text-white">Fast & Lightweight</div>
+                <small class="text-white-50">Powered by Bootstrap 5.3, no jQuery required.</small>
+              </div>
+            </li>
+            <li class="d-flex align-items-start gap-3 mb-3">
+              <span class="badge bg-primary-subtle text-primary-emphasis rounded-3 p-3"><i class="bi bi-shield-lock"></i></span>
+              <div>
+                <div class="fw-semibold text-white">Secure by default</div>
+                <small class="text-white-50">Client-side validation and helpful form states.</small>
+              </div>
+            </li>
+            <li class="d-flex align-items-start gap-3">
+              <span class="badge bg-primary-subtle text-primary-emphasis rounded-3 p-3"><i class="bi bi-stars"></i></span>
+              <div>
+                <div class="fw-semibold text-white">Polished UI</div>
+                <small class="text-white-50">Glassmorphism, toasts, and clean components.</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sign-In Modal -->
+  <div class="modal fade" id="signinModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sign in to your account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="signinForm" class="needs-validation" novalidate>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="email" placeholder="name@example.com" required />
+              <label for="email">Email address</label>
+              <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+
+            <div class="form-floating mb-2">
+              <input type="password" class="form-control" id="password" placeholder="••••••••" minlength="6" required />
+              <label for="password">Password</label>
+              <div class="invalid-feedback">Password must be at least 6 characters.</div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="remember" />
+                <label class="form-check-label" for="remember">Remember me</label>
+              </div>
+              <button type="button" class="btn btn-link p-0" id="togglePassword">Show password</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+
+            <div class="text-center small text-muted">or continue with</div>
+            <div class="d-flex gap-2 mt-2">
+              <button class="btn btn-outline-secondary w-100" type="button"><i class="bi bi-google me-2"></i>Google</button>
+              <button class="btn btn-outline-secondary w-100" type="button"><i class="bi bi-github me-2"></i>GitHub</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <small class="text-muted">No account? <a href="#signup">Create one</a></small>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast (appears after demo sign-in) -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="signinToast" class="toast align-items-center text-bg-success border-0" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          Signed in successfully (demo).
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <!-- Bootstrap 5.3 JS (no jQuery needed) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <script>
+    // Bootstrap validation
+    (() => {
+      const form = document.getElementById('signinForm');
+      form.addEventListener('submit', (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          event.preventDefault();
+          // Demo: Show a toast and close modal
+          const toastEl = document.getElementById('signinToast');
+          const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+          toast.show();
+
+          const modalEl = document.getElementById('signinModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal.hide();
+
+          form.reset();
+          form.classList.remove('was-validated');
+          return false;
+        }
+        form.classList.add('was-validated');
+      });
+    })();
+
+    // Password visibility toggle
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const input = document.getElementById('password');
+      const isPwd = input.getAttribute('type') === 'password';
+      input.setAttribute('type', isPwd ? 'text' : 'password');
+      this.textContent = isPwd ? 'Hide password' : 'Show password';
+    });
+  </script>
 </body>
 </html>
