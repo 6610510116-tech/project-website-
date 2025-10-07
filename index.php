@@ -1,44 +1,42 @@
+<?php
+    session_start();
+    include_once 'dbconnect.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="style.css">
+
+	<title>Home||LearnHub</title>
 </head>
 <body>
-    <h1? style="color: blue">
-    <?php
-        echo "Hello, Wolrd!";
-    ?>
-</h1>
-<?php
-
-echo "<p style='color: blue'>This is a paragraph generated bt PHP.</p>";
-
-?>
-
-
-
-<?php
-
-$vat 1.07;
-
-$price = 150;
-
-echo "<p style='color-green'>Price including VAT: " ($price* $vat) THB</p>";
-
- ?>
-
-
-
-<?php
-
-txt "this is \"Anfield\", \$the home";
-
-echo "<h1 style='color: red">$txt</h1>";
-
- ?>
-
+	<header>
+		<nav>
+			<div class="container">
+				<div class="nav-wrapper">
+					<div class="icon">
+						<a href="#"><span class="material-symbols-outlined">book_ribbon</span></a>
+						<a href="index.php"><h2>LearnHub</h2></a>
+					</div>
+					<ul class="menu">
+						<li><a href="index.php">หน้าหลัก</a></li>
+						<li><a href="login.php">เข้าสู่ระบบ</a></li>
+						<li><a href="register.php">สมัครสมาชิก</a></li>
+						<li><a href="admin_login.php">Admin</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<script src="script.js"></script>
 </body>
-
- </html>
+</html>
