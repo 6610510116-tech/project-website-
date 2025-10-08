@@ -65,6 +65,9 @@
 		.logo a {
 			text-decoration: none;
 		}
+		.logo i {
+			display: inline;
+		}
 		
 		.menu {
 			display: flex;
@@ -148,13 +151,14 @@
 		<nav>
 			<div class="container">
 				<div class="nav-wrapper">
+					<i class="fa-solid fa-book-open-reader fa-flip-horizontal fa-2xl" style="color: #285171;"></i>
 					<div class="logo">
 						<a href="index.php"><h1>LearnHub</h1></a>
 					</div>
 					<ul class="menu">
 						<li><a href="index.php">หน้าหลัก</a></li>
 						<li><a href="login.php">เข้าสู่ระบบ</a></li>
-						<li><a href="register.php">สมัครสมาชิก</a></li>
+						<li><a href="register.php">ลงทะเบียน</a></li>
 						<li><a href="admin_login.php">Admin</a></li>
 					</ul>
 				</div>
@@ -168,10 +172,10 @@
 							เรียนรู้อย่างมีประสิทธิภาพ
 						</h1>
 						<p>แพลตฟอร์มจองติวเตอร์ออนไลน์ที่ช่วยให้คุณเชื่อมต่อกับติวเตอร์มืออาชีพ <br>
-						เลือกเวลาได้ตามสะดวก และเรียนรู็ในวิชาที่คุณต้องการ
+						เลือกเวลาได้ตามสะดวก และเรียนรู้ในวิชาที่คุณต้องการ
 						</p>
 						<a href="#" class="discount-btn">เรียนรู้เพิ่มเติม</a>
-						<a href="#" class="logintutor-btn">สมัครเป็นติวเตอร์</a>
+						<a href="#" class="logintutor-btn">ลงทะเบียน</a>
 					</div>
 				</div>
 			</div>
