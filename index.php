@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-	<title>Home||LearnHub</title>
+	<title>Home | LearnHub</title>
 	<style>
 		:root {
 			--4a65a9: #4a65a9;
@@ -80,6 +80,12 @@
 							}
 						}
 					}
+
+					.discount-title-box h1 {
+						font-size: 50px;
+						color: var(--4a65a9);
+						
+					}
 				}
 
 			}
@@ -101,9 +107,6 @@
 						<li><a href="register.php">สมัครสมาชิก</a></li>
 						<li><a href="admin_login.php">Admin</a></li>
 					</ul>
-					<div class="hamburger">
-						<i class="fas fa-bars	"></i>
-					</div>
 				</div>
 			</div>
 		</nav>
