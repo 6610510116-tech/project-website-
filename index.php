@@ -11,11 +11,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 	<link rel="stylesheet" href="style.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-	<title>Home | LearnHub</title>
-	<style>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">	<style>
 		:root {
 			--4a65a9: #4a65a9;
 			--d3dbee: #d3dbee;
@@ -27,8 +25,8 @@
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
-			font-family: 'Nonto Sans Thai', sans-serif;
-			font-family: 'Sansation', sans-serif;
+			font-family: "Archivo Black", sans-serif;
+			font-family: 'Kanit', sans-serif;
 		}
 		
 		.container {
@@ -52,8 +50,7 @@
 					top: 25px;
 
 					.logo h1 {
-						font-weight: bold;
-						font-size: 50px;
+						font-size: 55px;
 						color: var(--4a65a9);
 					}
 
@@ -80,14 +77,7 @@
 							}
 						}
 					}
-
-					.discount-title-box h1 {
-						font-size: 50px;
-						color: var(--4a65a9);
-						
-					}
 				}
-
 			}
 		}
 
