@@ -57,6 +57,10 @@
 						color: var(--4a65a9);
 					}
 
+					.logo a {
+					    text-decoration: none;
+					}
+
 					.menu {
 						display: flex;
 						list-style: none;
