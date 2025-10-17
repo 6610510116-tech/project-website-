@@ -1,3 +1,4 @@
+
 <?php
     session_start();
     include_once 'dbconnect.php';
@@ -9,7 +10,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-	<link rel="stylesheet" href="style.css">
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,15 +46,29 @@
 		/* -------- NAVIGATION -------- */
 		nav {
 			width: 100%;
+			background-color: rgba(255, 255, 255, 0.9); /*พื้นหลังโปร่งใสสีขาว */
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* เงาใต้แถบนำทาง */
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+			backdrop-filter: blur(10px); /* ทำให้พื้นหลังเบลอเล็กน้อย */
+			border-bottom: 1px solid #e0e0e0; /* เส้นขอบล่างบางๆ */
 		}
 		
 		.nav-wrapper {
 			position: relative;
-			height: 200px;
+			height: 100px;
+			top: 0;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			top: 25px;
+		}
+
+		.logo {
+			margin-right: auto;
+			display: flex;
+			align-items: center;
+			gap: 10px;
 		}
 		
 		.logo h1 {
@@ -110,6 +124,7 @@
 			max-width: 1000px;
 			text-align: center;
 			padding: 0 20px;
+			margin-top: -100px;
 		}
 		
 		/* ✅ ตรงนี้คือส่วนเพิ่มขนาดฟอนต์ */
@@ -117,7 +132,10 @@
 			font-size: 80px;  /* ปรับขนาดฟอนต์ตรงนี้ได้เลย */
 			line-height: 1.2;
 			font-weight: 700;
-			color: var(--4a65a9);
+			color: transparent; /*ทำให้มันโปร่งใส่*/
+			background: linear-gradient(to bottom, #393f86, #859FDE);
+			-webkit-background-clip: text; /* ทำให้สีขึ้นแค่เฉพาะข้อความ */
+			background-clip: text;
 		}
 		
 		.discount-title-box p {
@@ -151,8 +169,8 @@
 		<nav>
 			<div class="container">
 				<div class="nav-wrapper">
-					<i class="fa-solid fa-book-open-reader fa-flip-horizontal fa-2xl" style="color: #285171;"></i>
 					<div class="logo">
+						<i class="fa-solid fa-book-open-reader fa-flip-horizontal fa-2xl" style="color: #285171;"></i>
 						<a href="index.php"><h1>LearnHub</h1></a>
 					</div>
 					<ul class="menu">
@@ -175,7 +193,7 @@
 						เลือกเวลาได้ตามสะดวก และเรียนรู้ในวิชาที่คุณต้องการ
 						</p>
 						<a href="#" class="discount-btn">เรียนรู้เพิ่มเติม</a>
-						<a href="#" class="logintutor-btn">ลงทะเบียน</a>
+						<a href="register.php" class="logintutor-btn">ลงทะเบียน</a>
 					</div>
 				</div>
 			</div>
