@@ -10,17 +10,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">	
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Noto Sans Thai', sans-serif;
-            font-family: 'Sansation', serif;
+            font-family: 'Kanit', serif;
         }
+
+        :root {
+			--4a65a9: #4a65a9;
+			--d3dbee: #d3dbee;
+			--6b96b9: #6b96b9;
+			--b7dee0: #b7dee0;
+		}
+
         body {
             background-color: #d3dbee;
             background: linear-gradient(to bottom, #d3dbee, #ffffff);
@@ -29,7 +37,51 @@
             justify-content: center;
             flex-direction: column;
             height: 100vh;
+            margin: 0;
+            padding: 0;
         }
+
+        nav {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /*พื้นหลังโปร่งใสสีขาว */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* เงาใต้แถบนำทาง */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px); /* ทำให้พื้นหลังเบลอเล็กน้อย */
+            border-bottom: 1px solid #e0e0e0; /* เส้นขอบล่างบางๆ */
+            margin-top: -150px;
+            padding-top: 0px;
+        }
+
+        .nav-wrapper {
+            position: relative;
+            height: 100px;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo {
+			margin-left: 77px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		
+		.logo h1 {
+			font-size: 55px;
+			color: var(--4a65a9);
+		}
+		
+		.logo a {
+			text-decoration: none;
+		}
+		.logo i {
+			display: inline;
+		}
         
         .container {
             background-color: #ffffff;
@@ -40,6 +92,14 @@
             width: 768px;
             max-width: 100%;
             min-height: 480px;
+            margin-top: 100px;
+        }
+
+        .container h1{
+            text-align: center;
+            color: #393f86;
+            margin-bottom: 20px 0;
+            font-size: 33px;
         }
 
         .container p{
@@ -83,6 +143,7 @@
             flex-direction: column;
             padding: 0 50px;
             height: 100%;
+            text-align: center;
         }
 
         .container input{
@@ -146,10 +207,19 @@
     <title>LERNHUB Login Page</title>
 </head>
 <body>
+    <nav>
+        <div class="nav-wrapper">
+            <div class="logo">
+                <i class="fa-solid fa-book-open-reader fa-flip-horizontal fa-2xl" style="color: #285171;"></i>
+                <a href="index.php"><h1>LearnHub</h1></a>
+            </div>
+        </div>
+    </nav>
 <div class="container" id="container">
     <div class="form-container sign in">
         <form>
-            <h1>เข้าสู่ระบบ</h1>
+            
+            <h1>Sign in for Student</h1>
             <div class="social-icons">
                 <a href="#" class="icon"><i class="fa-brands fa-facebook"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
@@ -159,15 +229,19 @@
             <div class="link-row">
                 <a href="#">ลืมรหัสผ่าน</a>
                 <span>||</span>
-                <a href="#">สมัครสมาชิก</a>
+                <a href="register.php">สมัครสมาชิก</a>
             </div>
             <button>Login</button>
+            <a href="#">เข้าสู่ระบบสำหรับติวเตอร์</a>
         </form>
     </div>
     <div class="image-container">
         <img src="https://cdn.pixabay.com/photo/2015/12/15/06/42/merry-christmas-1093758_1280.jpg" alt="login image" style="width:100%; height:100%; object-fit: cover; right:50%;">
     </div>
 </div>
-    <script src="scriptlogin.js"></script>
+    <script>
+        const container = document.getElementById('container');
+        const loginbtn = document.getElementById('loginbtn');
+    </script>
 </body>
 </html>
