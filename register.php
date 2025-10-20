@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include_once 'dbconnect.php';
@@ -59,20 +60,25 @@ if (isset($_POST['signup_tutor'])) {
     <meta charset="UTF-8">
     <title>Register - LearnHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">	
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Kanit', sans-serif; 
+        }
 
-.container {
-    background: white;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    width: 800px;
-    min-height: 480px;
-    overflow: hidden;
-    position: relative;
-    margin-top: 40px; /*  ขยับกล่องลงเล็กน้อย */
-}
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 800px;
+            min-height: 480px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 40px; /*  ขยับกล่องลงเล็กน้อย */
+        }
 
 
         body {
@@ -88,9 +94,26 @@ if (isset($_POST['signup_tutor'])) {
             margin-top: -150px;
         }
 
-        .nav-wrapper { height: 100px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
-        .logo { display: flex; align-items: center; gap: 10px; margin-left: 77px; }
-        .logo h1 { font-size: 55px; color: #4a65a9; }
+        .nav-wrapper { 
+            height: 100px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 40px; 
+        }
+
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-left: 77px; }
+
+        .logo h1 { 
+            font-size: 55px; 
+            color: #4a65a9;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
 
         .container {
             background: white;
@@ -163,12 +186,17 @@ if (isset($_POST['signup_tutor'])) {
         }
 
         .container.active .toggle-container { transform: translateX(-100%); }
-        .toggle-container h2 { margin-bottom: 20px; }
+        .toggle-container h2 { margin-bottom: 5px; }
+        .toggle-container p { margin-bottom: 15px; }
         .toggle-container button {
-            background: white; color: #4a65a9;
-            border: none; border-radius: 8px;
-            padding: 10px 45px; cursor: pointer;
-            font-weight: 600; text-transform: uppercase;
+            background: white; 
+            color: #4a65a9;
+            border: none; 
+            border-radius: 8px;
+            padding: 10px 45px; 
+            cursor: pointer;
+            font-weight: 600; 
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -211,7 +239,7 @@ if (isset($_POST['signup_tutor'])) {
             <input type="password" name="txtpassword" placeholder="รหัสผ่าน" required>
             <input type="password" name="txtconfirm" placeholder="ยืนยันรหัสผ่าน" required>
             <button type="submit" name="signup_tutor">ลงทะเบียนติวเตอร์</button>
-            <a href="tutor_login.php">กลับหน้าเข้าสู่ระบบ</a>
+            <a href="#">กลับหน้าเข้าสู่ระบบ</a>
         </form>
     </div>
 
