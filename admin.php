@@ -1,7 +1,7 @@
 <?php
 session_start();
-// ตรวจสอบเส้นทางไฟล์ dbconnect.php ให้ถูกต้องตามโครงสร้างโฟลเดอร์ของคุณ
-include_once 'dbconnect.php';
+// ตรวจสอบเส้นทางไฟล์ dbconnect.php ให้ถูกต้อง
+include_once 'dbconnect.php'; 
 
 // ตรวจสอบสิทธิ์แอดมิน
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
@@ -40,7 +40,8 @@ if (isset($_GET['delete_id'])) {
 $editing_user = null;
 if (isset($_GET['edit_id'])) {
     $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
-    $edit_result = mysqli_query($conn, "SELECT id, username, email, role FROM users WHERE id='$edit_id' LIMIT 1");
+    // แก้ไข: เปลี่ยน 'username' เป็น 'name'
+    $edit_result = mysqli_query($conn, "SELECT id, name, email, role FROM users WHERE id='$edit_id' LIMIT 1");
     $editing_user = mysqli_fetch_assoc($edit_result);
     if (!$editing_user) {
         // ถ้าไม่พบผู้ใช้ ให้กลับไปหน้า Admin
@@ -54,12 +55,14 @@ if (isset($_GET['edit_id'])) {
 // ------------------------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'update_user') {
     $user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
-    $new_username = mysqli_real_escape_string($conn, $_POST['username']);
+    // แก้ไข: เปลี่ยนการรับค่าจาก 'username' เป็น 'name'
+    $new_name = mysqli_real_escape_string($conn, $_POST['name']); 
     $new_email = mysqli_real_escape_string($conn, $_POST['email']);
     $new_role = mysqli_real_escape_string($conn, $_POST['role']);
     $new_password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    $update_fields = "username='$new_username', email='$new_email', role='$new_role'";
+    // แก้ไข: เปลี่ยน 'username' เป็น 'name' ในคำสั่ง SQL
+    $update_fields = "name='$new_name', email='$new_email', role='$new_role'";
     
     if (!empty($new_password)) {
         // **การใช้งานจริง: ควรเข้ารหัสรหัสผ่านด้วย password_hash()**
@@ -78,9 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
 }
 
 // ------------------------------------------------------------------
-// ดึงข้อมูลผู้ใช้ทั้งหมดเพื่อแสดงตาราง
+// ดึงข้อมูลผู้ใช้แยกตามบทบาท (สำคัญสำหรับการแยกตาราง)
 // ------------------------------------------------------------------
-$result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
+$admin_result = mysqli_query($conn, "SELECT * FROM users WHERE role='admin' ORDER BY id ASC");
+$tutor_result = mysqli_query($conn, "SELECT * FROM users WHERE role='tutor' ORDER BY id ASC");
+$student_result = mysqli_query($conn, "SELECT * FROM users WHERE role='student' ORDER BY id ASC");
 
 // แสดงข้อความแจ้งเตือน (ถ้ามี)
 if (isset($_GET['msg'])) {
@@ -97,6 +102,9 @@ if (isset($_GET['msg'])) {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
+/* ---------------------------------------------------- */
+/* CSS ทั่วไป */
+/* ---------------------------------------------------- */
 body {
     font-family: 'Kanit', sans-serif;
     background: #eef3fb;
@@ -109,7 +117,9 @@ nav {
     padding: 15px 50px;
     display: flex; justify-content: space-between; align-items: center;
 }
+/* ---------------------------------------------------- */
 /* CSS สำหรับฟอร์มแก้ไข */
+/* ---------------------------------------------------- */
 .edit-form-wrapper {
     display: flex;
     justify-content: center;
@@ -123,7 +133,7 @@ nav {
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    border-left: 5px solid #6b96b9; /* เปลี่ยนสีเส้นขอบเพื่อให้เข้ากับปุ่ม Edit */
+    border-left: 5px solid #6b96b9; 
 }
 .edit-container h2 {
     color: #6b96b9;
@@ -146,10 +156,16 @@ nav {
     display: block; text-align: center; margin-top: 15px; color: #d9534f; 
     text-decoration: none; font-size: 14px; 
 }
-/* CSS เดิมสำหรับตาราง */
-table {
+/* ---------------------------------------------------- */
+/* CSS สำหรับตาราง */
+/* ---------------------------------------------------- */
+.dashboard-content {
     width: 90%;
     margin: 40px auto;
+}
+table {
+    width: 100%;
+    margin-bottom: 50px; /* เพิ่มระยะห่างระหว่างตาราง */
     border-collapse: collapse;
     background: white;
     border-radius: 10px;
@@ -177,6 +193,10 @@ a.btn {
 .btn-edit {background: #6b96b9; color: white;}
 .btn-delete {background: #d9534f; color: white;}
 .btn-logout {background: #f7c948; color: black;}
+/* สีส่วนหัวของแต่ละตาราง */
+.h-admin { color: #4a65a9; border-bottom: 2px solid #4a65a9; padding-bottom: 5px; }
+.h-tutor { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
+.h-student { color: #ffc107; border-bottom: 2px solid #ffc107; padding-bottom: 5px; }
 </style>
 </head>
 <body>
@@ -196,8 +216,8 @@ a.btn {
             <input type="hidden" name="user_id" value="<?= $editing_user['id']; ?>">
             
             <div class="form-group">
-                <label for="username">ชื่อผู้ใช้:</label>
-                <input type="text" id="username" name="username" value="<?= htmlspecialchars($editing_user['username']); ?>" required>
+                <label for="name">ชื่อผู้ใช้:</label>
+                <input type="text" id="name" name="name" value="<?= htmlspecialchars($editing_user['name']); ?>" required>
             </div>
             
             <div class="form-group">
@@ -227,31 +247,95 @@ a.btn {
 </div>
 <?php endif; ?>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ชื่อผู้ใช้</th>
-        <th>อีเมล</th>
-        <th>บทบาท</th>
-        <th>วันที่สมัคร</th>
-        <th>จัดการ</th>
-    </tr>
+<div class="dashboard-content">
 
-    <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-    <tr>
-        <td><?= $row['id']; ?></td>
-        <td><?= htmlspecialchars($row['name']); ?></td>
-        <td><?= htmlspecialchars($row['email']); ?></td>
-        <td><?= $row['role']; ?></td>
-        <td><?= $row['created_at']; ?></td>
-        <td>
-            <a href="admin.php?edit_id=<?= $row['id']; ?>" class="btn btn-edit">แก้ไข</a>
-            <a href="admin.php?delete_id=<?= $row['id']; ?>" class="btn btn-delete" 
-               onclick="return confirm('แน่ใจหรือไม่ว่าจะลบผู้ใช้นี้?');">ลบ</a>
-        </td>
-    </tr>
-    <?php } ?>
-</table>
+    <h3 class="h-admin">👨‍💻 รายชื่อผู้ดูแลระบบ (Admin)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>อีเมล</th>
+                <th>บทบาท</th>
+                <th>วันที่สมัคร</th>
+                <th>จัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($admin_result)) { ?>
+            <tr>
+                <td><?= $row['id']; ?></td>
+                <td><?= htmlspecialchars($row['name']); ?></td> <td><?= htmlspecialchars($row['email']); ?></td>
+                <td><?= $row['role']; ?></td>
+                <td><?= $row['created_at']; ?></td>
+                <td>
+                    <a href="admin.php?edit_id=<?= $row['id']; ?>" class="btn btn-edit">แก้ไข</a>
+                    <a href="admin.php?delete_id=<?= $row['id']; ?>" class="btn btn-delete" 
+                       onclick="return confirm('แน่ใจหรือไม่ว่าจะลบผู้ใช้นี้?');">ลบ</a>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+
+    <h3 class="h-tutor">🧑‍🏫 รายชื่ออาจารย์ (Tutor)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>อีเมล</th>
+                <th>บทบาท</th>
+                <th>วันที่สมัคร</th>
+                <th>จัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($tutor_result)) { ?>
+            <tr>
+                <td><?= $row['id']; ?></td>
+                <td><?= htmlspecialchars($row['name']); ?></td> <td><?= htmlspecialchars($row['email']); ?></td>
+                <td><?= $row['role']; ?></td>
+                <td><?= $row['created_at']; ?></td>
+                <td>
+                    <a href="admin.php?edit_id=<?= $row['id']; ?>" class="btn btn-edit">แก้ไข</a>
+                    <a href="admin.php?delete_id=<?= $row['id']; ?>" class="btn btn-delete" 
+                       onclick="return confirm('แน่ใจหรือไม่ว่าจะลบผู้ใช้นี้?');">ลบ</a>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+
+    <h3 class="h-student">🎒 รายชื่อนักเรียน (Student)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>อีเมล</th>
+                <th>บทบาท</th>
+                <th>วันที่สมัคร</th>
+                <th>จัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($student_result)) { ?>
+            <tr>
+                <td><?= $row['id']; ?></td>
+                <td><?= htmlspecialchars($row['name']); ?></td> <td><?= htmlspecialchars($row['email']); ?></td>
+                <td><?= $row['role']; ?></td>
+                <td><?= $row['created_at']; ?></td>
+                <td>
+                    <a href="admin.php?edit_id=<?= $row['id']; ?>" class="btn btn-edit">แก้ไข</a>
+                    <a href="admin.php?delete_id=<?= $row['id']; ?>" class="btn btn-delete" 
+                       onclick="return confirm('แน่ใจหรือไม่ว่าจะลบผู้ใช้นี้?');">ลบ</a>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
