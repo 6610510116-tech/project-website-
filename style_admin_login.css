@@ -1,0 +1,6 @@
+body { font-family: 'Kanit', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .admin-login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+    .admin-login-box h2 { color: #4a65a9; margin-bottom: 25px; }
+    .admin-login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    .admin-login-box button { background: #4a65a9; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
+    .admin-login-box button:hover { background: #3b5085; }
