@@ -75,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
 }
 
 // ดึงข้อมูลผู้ใช้แยกตามบทบาท (สำคัญสำหรับการแยกตาราง)
-$admin_result = mysqli_query($conn, "SELECT * FROM users WHERE role='admin' ORDER BY id ASC");
 $tutor_result = mysqli_query($conn, "SELECT * FROM users WHERE role='tutor' ORDER BY id ASC");
 $student_result = mysqli_query($conn, "SELECT * FROM users WHERE role='student' ORDER BY id ASC");
 
