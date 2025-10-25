@@ -1,0 +1,117 @@
+:root {
+			--4a65a9: #4a65a9;
+			--d3dbee: #d3dbee;
+			--6b96b9: #6b96b9;
+			--b7dee0: #b7dee0;
+		}
+		
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Kanit', sans-serif;
+		}
+		
+		.container {
+			max-width: 1320px;
+			margin: auto;
+			padding: 0 20px;
+		}
+		
+		/* Header Section */
+		header {
+			height: 800px;
+			background: linear-gradient(to bottom, var(--d3dbee), #ffffff);
+			position: relative;
+			text-align: center;
+		}
+		
+		/* -------- NAVIGATION -------- */
+		nav {
+			width: 100%;
+			background-color: rgba(255, 255, 255, 0.9); /*พื้นหลังโปร่งใสสีขาว */
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* เงาใต้แถบนำทาง */
+			position: fixed;
+			top: 0;
+			z-index: 1000;
+			backdrop-filter: blur(10px); /* ทำให้พื้นหลังเบลอเล็กน้อย */
+			border-bottom: 1px solid #e0e0e0; /* เส้นขอบล่างบางๆ */
+		}
+		
+		.nav-wrapper {
+			position: relative;
+			height: 100px;
+			top: 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.logo {
+			margin-right: auto;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		
+		.logo h1 {
+			font-size: 55px;
+			color: var(--4a65a9);
+		}
+		
+		.logo a {
+			text-decoration: none;
+		}
+		.logo i {
+			display: inline;
+		}
+		
+		.menu {
+			display: flex;
+			list-style: none;
+		}
+		
+		.menu li {
+			margin-left: 40px;
+		}
+		
+		.menu a {
+			text-decoration: none;
+			color: var(--4a65a9);
+			font-size: 18px;
+			transition: 0.3s;
+		}
+		
+		.menu a:hover {
+			color: var(--6b96b9);
+		}
+
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #f7f7ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      margin: 0;
+      padding-top: 100px;
+    }
+    .content-box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 60%;
+      text-align: center;
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--4a65a9);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
