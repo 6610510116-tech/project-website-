@@ -4,15 +4,13 @@ session_start();
 include_once 'dbconnect.php'; 
 
 // ตรวจสอบสิทธิ์แอดมิน
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+if (!isset($_SESSION['user_id'])) {
     // ผู้ใช้ที่ไม่มีสิทธิ์จะถูกส่งไปหน้า Admin Login
     header("Location: admin_login.php"); 
     exit();
 }
 
-// ------------------------------------------------------------------
 // 1. ฟังก์ชัน DELETE (ลบ)
-// ------------------------------------------------------------------
 if (isset($_GET['delete_id'])) {
     $user_id_to_delete = mysqli_real_escape_string($conn, $_GET['delete_id']);
 
@@ -34,9 +32,7 @@ if (isset($_GET['delete_id'])) {
     exit();
 }
 
-// ------------------------------------------------------------------
 // 2. ฟังก์ชัน EDIT (แก้ไข) - เตรียมข้อมูลหากมี ID ถูกส่งมา (แสดงฟอร์ม)
-// ------------------------------------------------------------------
 $editing_user = null;
 if (isset($_GET['edit_id'])) {
     $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
@@ -50,9 +46,7 @@ if (isset($_GET['edit_id'])) {
     }
 }
 
-// ------------------------------------------------------------------
 // 3. ฟังก์ชัน EDIT (บันทึกข้อมูลที่แก้ไข)
-// ------------------------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'update_user') {
     $user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
     // แก้ไข: เปลี่ยนการรับค่าจาก 'username' เป็น 'name'
@@ -80,9 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     exit();
 }
 
-// ------------------------------------------------------------------
 // ดึงข้อมูลผู้ใช้แยกตามบทบาท (สำคัญสำหรับการแยกตาราง)
-// ------------------------------------------------------------------
 $admin_result = mysqli_query($conn, "SELECT * FROM users WHERE role='admin' ORDER BY id ASC");
 $tutor_result = mysqli_query($conn, "SELECT * FROM users WHERE role='tutor' ORDER BY id ASC");
 $student_result = mysqli_query($conn, "SELECT * FROM users WHERE role='student' ORDER BY id ASC");
@@ -101,103 +93,7 @@ if (isset($_GET['msg'])) {
 <title>Admin Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-/* ---------------------------------------------------- */
-/* CSS ทั่วไป */
-/* ---------------------------------------------------- */
-body {
-    font-family: 'Kanit', sans-serif;
-    background: #eef3fb;
-    margin: 0;
-    padding: 0;
-}
-nav {
-    background: #4a65a9;
-    color: white;
-    padding: 15px 50px;
-    display: flex; justify-content: space-between; align-items: center;
-}
-/* ---------------------------------------------------- */
-/* CSS สำหรับฟอร์มแก้ไข */
-/* ---------------------------------------------------- */
-.edit-form-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0; 
-}
-.edit-container {
-    width: 90%;
-    max-width: 550px;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    border-left: 5px solid #6b96b9; 
-}
-.edit-container h2 {
-    color: #6b96b9;
-    margin-top: 0;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; }
-.form-group input, .form-group select { 
-    width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; 
-}
-.btn-update { 
-    background: #6b96b9; color: white; padding: 10px 20px; border: none; border-radius: 5px; 
-    cursor: pointer; font-size: 16px; margin-top: 10px; width: 100%; 
-}
-.btn-update:hover { background: #5a7f9a; }
-.btn-cancel { 
-    display: block; text-align: center; margin-top: 15px; color: #d9534f; 
-    text-decoration: none; font-size: 14px; 
-}
-/* ---------------------------------------------------- */
-/* CSS สำหรับตาราง */
-/* ---------------------------------------------------- */
-.dashboard-content {
-    width: 90%;
-    margin: 40px auto;
-}
-table {
-    width: 100%;
-    margin-bottom: 50px; /* เพิ่มระยะห่างระหว่างตาราง */
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-th, td {
-    padding: 15px;
-    text-align: center;
-}
-th {
-    background: #4a65a9;
-    color: white;
-}
-tr:nth-child(even) {
-    background: #f5f7fa;
-}
-a.btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-    margin: 0 3px;
-}
-.btn-edit {background: #6b96b9; color: white;}
-.btn-delete {background: #d9534f; color: white;}
-.btn-logout {background: #f7c948; color: black;}
-/* สีส่วนหัวของแต่ละตาราง */
-.h-admin { color: #4a65a9; border-bottom: 2px solid #4a65a9; padding-bottom: 5px; }
-.h-tutor { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
-.h-student { color: #ffc107; border-bottom: 2px solid #ffc107; padding-bottom: 5px; }
-</style>
+<link rel="stylesheet" href="style_admin.css">
 </head>
 <body>
 
@@ -228,7 +124,6 @@ a.btn {
             <div class="form-group">
                 <label for="role">บทบาท:</label>
                 <select id="role" name="role" required>
-                    <option value="admin" <?= ($editing_user['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
                     <option value="tutor" <?= ($editing_user['role'] == 'tutor') ? 'selected' : ''; ?>>Tutor (ติวเตอร์)</option>
                     <option value="student" <?= ($editing_user['role'] == 'student') ? 'selected' : ''; ?>>Student (นักเรียน)</option>
                 </select>
@@ -248,35 +143,6 @@ a.btn {
 <?php endif; ?>
 
 <div class="dashboard-content">
-
-    <h3 class="h-admin">👨‍💻 รายชื่อผู้ดูแลระบบ (Admin)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>ชื่อผู้ใช้</th>
-                <th>อีเมล</th>
-                <th>บทบาท</th>
-                <th>วันที่สมัคร</th>
-                <th>จัดการ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = mysqli_fetch_assoc($admin_result)) { ?>
-            <tr>
-                <td><?= $row['id']; ?></td>
-                <td><?= htmlspecialchars($row['name']); ?></td> <td><?= htmlspecialchars($row['email']); ?></td>
-                <td><?= $row['role']; ?></td>
-                <td><?= $row['created_at']; ?></td>
-                <td>
-                    <a href="admin.php?edit_id=<?= $row['id']; ?>" class="btn btn-edit">แก้ไข</a>
-                    <a href="admin.php?delete_id=<?= $row['id']; ?>" class="btn btn-delete" 
-                       onclick="return confirm('แน่ใจหรือไม่ว่าจะลบผู้ใช้นี้?');">ลบ</a>
-                </td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
 
     <h3 class="h-tutor">🧑‍🏫 รายชื่ออาจารย์ (Tutor)</h3>
     <table>
