@@ -4,93 +4,185 @@
 	--6b96b9: #6b96b9;
 	--b7dee0: #b7dee0;
 }
-
+/* -------------------- CSS: style_admin.css -------------------- */
 body {
     font-family: 'Kanit', sans-serif;
-    background: #eef3fb;
+    background-color: #f4f7f6;
     margin: 0;
     padding: 0;
-}
-nav {
-    background: #4a65a9;
-    color: white;
-    padding: 15px 50px;
-    display: flex; justify-content: space-between; align-items: center;
+    color: #333;
 }
 
-/* CSS สำหรับฟอร์มแก้ไข */
+nav {
+    background-color: #364d79;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav h2 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.btn-logout {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}
+
+.dashboard-content {
+    padding: 20px 40px;
+}
+
+/* หัวข้อตาราง */
+.h-tutor, .h-student {
+    margin-top: 30px;
+    border-bottom: 3px solid;
+    padding-bottom: 5px;
+    font-weight: 600;
+}
+
+.h-tutor { border-color: #3498db; color: #3498db; }
+.h-student { border-color: #2ecc71; color: #2ecc71; }
+
+/* ตาราง */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+th {
+    background-color: #ecf0f1;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* ปุ่มจัดการ */
+.btn {
+    padding: 6px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-right: 5px;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+    color: white;
+}
+.btn-edit:hover { background-color: #e67e22; }
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+.btn-delete:hover { background-color: #c0392b; }
+
+/* -------------------- ฟอร์มแก้ไข (Modal-like) -------------------- */
 .edit-form-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0; 
+    z-index: 1000;
 }
+
 .edit-container {
-    width: 90%;
-    max-width: 550px;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    border-left: 5px solid #6b96b9; 
-}
-.edit-container h2 {
-    color: #6b96b9;
-    margin-top: 0;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; }
-.form-group input, .form-group select { 
-    width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; 
-}
-.btn-update { 
-    background: #6b96b9; color: white; padding: 10px 20px; border: none; border-radius: 5px; 
-    cursor: pointer; font-size: 16px; margin-top: 10px; width: 100%; 
-}
-.btn-update:hover { background: #5a7f9a; }
-.btn-cancel { 
-    display: block; text-align: center; margin-top: 15px; color: #d9534f; 
-    text-decoration: none; font-size: 14px; 
-}
-/* CSS สำหรับตาราง */
-.dashboard-content {
-    width: 90%;
-    margin: 40px auto;
-}
-table {
-    width: 100%;
-    margin-bottom: 50px; /* เพิ่มระยะห่างระหว่างตาราง */
-    border-collapse: collapse;
     background: white;
+    padding: 30px;
     border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
 }
-th, td {
-    padding: 15px;
-    text-align: center;
+
+.edit-container h2 {
+    margin-top: 0;
+    color: #364d79;
+    border-bottom: 2px solid #364d79;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
-th {
-    background: #4a65a9;
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.btn-update {
+    background-color: #3498db;
     color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 10px;
+    font-weight: 600;
 }
-tr:nth-child(even) {
-    background: #f5f7fa;
+
+.btn-update:hover {
+    background-color: #2980b9;
 }
-a.btn {
-    padding: 6px 12px;
-    border-radius: 6px;
+
+.btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #e74c3c;
     text-decoration: none;
-    font-size: 13px;
-    margin: 0 3px;
+    font-weight: 600;
 }
-.btn-edit {background: #6b96b9; color: white;}
-.btn-delete {background: #d9534f; color: white;}
-.btn-logout {background: var(--6b96b9); color: white;}
-/* สีส่วนหัวของแต่ละตาราง */
-.h-admin { color: #4a65a9; border-bottom: 2px solid #4a65a9; padding-bottom: 5px; }
-.h-tutor { color: var(--4a65a9); border-bottom: 2px solid var(--4a65a9); padding-bottom: 5px; }
-.h-student { color: var(--6b96b9); border-bottom: 2px solid var(--6b96b9); padding-bottom: 5px; }
