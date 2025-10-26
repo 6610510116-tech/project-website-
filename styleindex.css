@@ -1,146 +1,262 @@
+/* --- ตัวแปรสี --- */
 :root {
-			--4a65a9: #4a65a9;
-			--d3dbee: #d3dbee;
-			--6b96b9: #6b96b9;
-			--b7dee0: #b7dee0;
-		}
-		
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: 'Kanit', sans-serif;
-		}
-		
-		.container {
-			max-width: 1320px;
-			margin: auto;
-			padding: 0 20px;
-		}
-		
-		/* Header Section */
-		header {
-			height: 800px;
-			background: linear-gradient(to bottom, var(--d3dbee), #ffffff);
-			position: relative;
-			text-align: center;
-		}
-		
-		/* -------- NAVIGATION -------- */
-		nav {
-			width: 100%;
-			background-color: rgba(255, 255, 255, 0.9); /*พื้นหลังโปร่งใสสีขาว */
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* เงาใต้แถบนำทาง */
-			position: sticky;
-			top: 0;
-			z-index: 1000;
-			backdrop-filter: blur(10px); /* ทำให้พื้นหลังเบลอเล็กน้อย */
-			border-bottom: 1px solid #e0e0e0; /* เส้นขอบล่างบางๆ */
-		}
-		
-		.nav-wrapper {
-			position: relative;
-			height: 100px;
-			top: 0;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
+    --4a65a9: #4a65a9;
+    --d3dbee: #d3dbee;
+    --6b96b9: #6b96b9;
+    --b7dee0: #b7dee0;
+}
 
-		.logo {
-			margin-right: auto;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
-		
-		.logo h1 {
-			font-size: 55px;
-			color: var(--4a65a9);
-		}
-		
-		.logo a {
-			text-decoration: none;
-		}
-		.logo i {
-			display: inline;
-		}
-		
-		.menu {
-			display: flex;
-			list-style: none;
-		}
-		
-		.menu li {
-			margin-left: 40px;
-		}
-		
-		.menu a {
-			text-decoration: none;
-			color: var(--4a65a9);
-			font-size: 18px;
-			transition: 0.3s;
-		}
-		
-		.menu a:hover {
-			color: var(--6b96b9);
-		}
-		
-		/* -------- TITLE SECTION -------- */
-		.discount-title {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: calc(100% - 200px); /* ให้ข้อความอยู่กลางหลัง header */
-		}
-		
-		.discount-title-wrapper {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			text-align: center;
-			width: 100%;
-		}
-		
-		.discount-title-box {
-			max-width: 1000px;
-			text-align: center;
-			padding: 0 20px;
-			margin-top: -100px;
-		}
-		
-		/* ✅ ตรงนี้คือส่วนเพิ่มขนาดฟอนต์ */
-		.discount-title-box h1 {
-			font-size: 80px;  /* ปรับขนาดฟอนต์ตรงนี้ได้เลย */
-			line-height: 1.2;
-			font-weight: 700;
-			color: transparent; /*ทำให้มันโปร่งใส่*/
-			background: linear-gradient(to bottom, #393f86, #859FDE);
-			-webkit-background-clip: text; /* ทำให้สีขึ้นแค่เฉพาะข้อความ */
-			background-clip: text;
-		}
-		
-		.discount-title-box p {
-			font-size: 22px;
-			margin-top: 20px;
-			color: #333;
-			line-height: 1.6;
-		}
-		
-		.discount-btn,
-		.logintutor-btn {
-			display: inline-block;
-			margin-top: 25px;
-			margin-right: 10px;
-			padding: 10px 25px;
-			background-color: var(--4a65a9);
-			color: #fff;
-			text-decoration: none;
-    		border-radius: 6px;
-    		transition: 0.3s;
-		}
+/* --- Reset และ Font --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kanit', sans-serif;
+}
 
-		.discount-btn:hover,
-		.logintutor-btn:hover {
-			background-color: var(--6b96b9);}
+/* --- Container --- */
+.container {
+    max-width: 1320px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* --- Header Section --- */
+header {
+    height: 800px;
+    background: linear-gradient(to bottom, var(--d3dbee), #ffffff);
+    position: relative;
+    text-align: center;
+}
+
+/* --- Navigation --- */
+nav {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-wrapper {
+    position: relative;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.logo h1 {
+    font-size: 55px;
+    color: var(--4a65a9);
+}
+
+/* --- Menu --- */
+.menu {
+    display: flex;
+    list-style: none;
+}
+
+.menu li {
+    margin-left: 40px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--4a65a9);
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    color: var(--6b96b9);
+}
+
+/* --- Title Section --- */
+.discount-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 200px);
+}
+
+.discount-title-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.discount-title-box {
+    max-width: 1000px;
+    text-align: center;
+    padding: 0 20px;
+    margin-top: -50px;
+}
+
+.discount-title-box h1 {
+    font-size: 80px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: transparent;
+    background: linear-gradient(to bottom, #393f86, #859FDE);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.discount-title-box p {
+    font-size: 22px;
+    margin-top: 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.discount-btn,
+.logintutor-btn {
+    display: inline-block;
+    margin-top: 25px;
+    margin-right: 10px;
+    padding: 10px 25px;
+    background-color: var(--4a65a9);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.discount-btn:hover,
+.logintutor-btn:hover {
+    background-color: var(--6b96b9);
+}
+
+/* --- User Info --- */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info span {
+    color: var(--4a65a9);
+    font-weight: 500;
+}
+
+.user-info a {
+    color: var(--4a65a9);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.user-info a:hover {
+    background-color: var(--6b96b9);
+}
+
+/* --- SUBJECT TABS --- */
+.subject-tabs {
+    margin-top: 10px; /* ปรับให้ใกล้กับ header */
+}
+
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 15px 20px;
+    color: var(--4a65a9);
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+.tab-item i {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.tab-item.active {
+    color: #fff;
+    background: var(--4a65a9);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.tab-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.tab-panel {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tab-panel.active {
+    display: flex;
+}
+
+.subject-item {
+    width: 220px;
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 10px;
+    margin: 10px;
+}
+
+.subject-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.subject-item p {
+    padding: 10px;
+    font-weight: 500;
+}
+
+.subject-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 768px) {
+    .tab-menu {
+        gap: 15px;
+    }
+}
