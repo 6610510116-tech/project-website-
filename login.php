@@ -1,6 +1,57 @@
 <?php
+    ob_start(); //ป้องกัน header ส่งไม่ไป
     session_start();
     include_once 'dbconnect.php';
+
+    $error_message = '' ;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // รับข้อมูลจากฟอร์ม
+        $email = $_POST['txtemail'];
+        $password = $_POST['txtpassword'];
+
+        // ตรวจสอบ role user
+        if (isset($_POST['student'])) {
+            $role = 'student';
+        } elseif (isset($_POST['tutor'])) {
+            $role = 'tutor';
+        } else {
+            $role = null;
+        }
+
+        if ($role) {
+            $query = "SELECT * FROM users WHERE email = ? AND role = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ss", $email, $role);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result && $result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+
+                // Setting Session
+                if (password_verify($password, $user['password'])) {
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user_name'] = $user['name']; 
+                    $_SESSION['user_role'] = strtolower($user['role']);
+                    $_SESSION['user_email'] = $user['email'];
+                    $_SESSION['login_message'] = "Welcome, " . $user['name'];
+                    //Check role
+                    if ($_SESSION['user_role'] == 'student') {
+                        header("Location: student_dashboard.php");
+                        exit;
+                    } elseif ($_SESSION['user_role'] == 'tutor') {
+                        header("Location: tutor_dashboard.php");
+                        exit; }
+                } else {
+                    $error_message = "อีเมลหรือรหัสผ่านไม่ถูกต้อง" ;
+                }
+            } else {
+                $error_message = "ไม่พบบัญชีนี้";
+            }
+        }
+    }
+    ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +59,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,14 +85,14 @@
                 <a href="#" class="icon"><i class="fa-brands fa-facebook"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
             </div>
-            <input type="email" placeholder="Email" name="txtemail" required_class="form-control">
-            <input type="password" placeholder="Password" name="txtpassword" required_class="form-control">
+            <input type="email" placeholder="Email" name="txtemail" required class="form-control">
+            <input type="password" placeholder="Password" name="txtpassword" required class="form-control">
             <div class="link-row">
                 <a href="#">ลืมรหัสผ่าน</a>
                 <span>||</span>
                 <a href="register.php">สมัครสมาชิก</a>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" name="student">Login</button>
             <a href="#" class="switch-to-tutor">เข้าสู่ระบบสำหรับติวเตอร์</a>
         </form>
     </div>
@@ -54,14 +105,14 @@
                 <a href="#" class="icon"><i class="fa-brands fa-facebook"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
             </div>
-            <input type="email" placeholder="Email" name="txtemail" required_class="form-control">
-            <input type="password" placeholder="Password" name="txtpassword" required_class="form-control">
+            <input type="email" placeholder="Email" name="txtemail" required class="form-control">
+            <input type="password" placeholder="Password" name="txtpassword" required class="form-control">
             <div class="link-row">
                 <a href="#">ลืมรหัสผ่าน</a>
                 <span>||</span>
                 <a href="register.php">สมัครสมาชิก</a>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" name="tutor">Login</button>
             <a href="#" class="switch-to-student">เข้าสู่ระบบสำหรับนักเรียน</a>
         </form>
     </div>
@@ -103,5 +154,11 @@
             });
         });
     </script>
+
+    <div class="error-box">
+        <?php if (!empty($error_message)) : ?>
+            <p style="color:red;"><?php echo htmlspecialchars($error_message); ?></p>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
