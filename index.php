@@ -155,6 +155,9 @@
             <div class="container">
                 <div class="nav-wrapper">
                     <div class="logo">
+                        <div class="menu-toggle">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
                         <i class="fa-solid fa-book-open-reader fa-flip-horizontal fa-2xl" style="color: #285171;"></i>
                         <a href="index.php"><h1>LearnHub</h1></a>
                     </div>
@@ -307,6 +310,13 @@
             panels.forEach(p => p.classList.remove('active'));
             document.querySelector(`.tab-panel[data-tab="${tab.dataset.tab}"]`).classList.add('active');
         });
+    });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.menu');
+
+    menuToggle.addEventListener('click', () => {
+        menu.classList.toggle('active');
     });
 
 </script>
