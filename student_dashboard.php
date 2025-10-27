@@ -3,13 +3,22 @@ session_start();
 include_once 'dbconnect.php';
 
 // ตรวจสอบการล็อกอิน
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
+// เรายังคงดึงบทบาทมาตรวจสอบเพื่อแสดงลิงก์แอดมิน แม้ว่าหน้านี้หลักๆ จะสำหรับนักเรียน
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'นักเรียน'; 
+$role = $_SESSION['role'] ?? 'student'; // <--- ดึงตัวแปร role เพื่อใช้งาน
+
+// บังคับ Redirect หากไม่ใช่ Student หรือ Admin
+if ($role != 'student' && $role != 'admin') {
+    header("Location: login.php");
+    exit();
+}
+
 $message = ''; 
 
 // 🚀 Logic สำหรับการยกเลิกคอร์สที่ชำระเงินแล้ว 🚀
@@ -22,9 +31,9 @@ if (isset($_POST['cancel_course'])) {
                        WHERE id = $booking_id_to_cancel AND user_id = $user_id AND status = 'paid'";
         
         if (mysqli_query($conn, $cancel_sql)) {
-            $_SESSION['cancellation_success'] = "❌ คอร์สถูกยกเลิกเรียบร้อยแล้ว. (ไม่มีการคืนเงินที่ชำระไป)";
+            $_SESSION['cancellation_success'] = " คอร์สถูกยกเลิกเรียบร้อยแล้ว. (ไม่มีการคืนเงินที่ชำระไป)";
         } else {
-            $_SESSION['cancellation_error'] = "⚠️ เกิดข้อผิดพลาดในการยกเลิก: " . mysqli_error($conn);
+            $_SESSION['cancellation_error'] = " เกิดข้อผิดพลาดในการยกเลิก: " . mysqli_error($conn);
         }
         header("Location: student_dashboard.php");
         exit();
@@ -42,7 +51,7 @@ if (isset($_POST['add_to_cart'])) {
         $course_data = mysqli_fetch_assoc($course_data_result);
 
         $start_time = mysqli_real_escape_string($conn, $course_data['time'] ?? 'N/A');
-        $end_time = 'N/A';
+        $end_time = 'NULL';
         
         $check_sql = "SELECT id FROM bookings WHERE user_id=$user_id AND tutor_id=$course_id AND status='pending'";
         $check_result = mysqli_query($conn, $check_sql);
@@ -52,7 +61,7 @@ if (isset($_POST['add_to_cart'])) {
             exit();
         } else {
             $insert_sql = "INSERT INTO bookings (user_id, tutor_id, booking_date, start_time, end_time, status)
-                           VALUES ($user_id, $course_id, CURDATE(), '$start_time', '$end_time', 'pending')";
+                           VALUES ($user_id, $course_id, CURDATE(), '$start_time', $end_time, 'pending')";
             
             if (mysqli_query($conn, $insert_sql)) {
                 header("Location: student_dashboard.php?added=success");
@@ -71,12 +80,12 @@ if (isset($_POST['add_to_cart'])) {
 if (isset($_GET['added'])) {
     $status = $_GET['added'];
     if ($status == 'success') {
-        $message = '<script>alert("✅ เพิ่มคอร์สลงในตะกร้าเรียบร้อยแล้ว!");</script>';
+        $message = '<script>alert(" เพิ่มคอร์สลงในตะกร้าเรียบร้อยแล้ว!");</script>';
     } elseif ($status == 'already_exists') {
-        $message = '<script>alert("⚠️ คอร์สนี้อยู่ในตะกร้าของคุณแล้ว!");</script>';
+        $message = '<script>alert(" คอร์สนี้อยู่ในตะกร้าของคุณแล้ว!");</script>';
     } elseif ($status == 'error') {
         $details = htmlspecialchars($_GET['details'] ?? 'ไม่ทราบสาเหตุ');
-        $message = '<script>alert("❌ การเพิ่มลงตะกร้าล้มเหลว: ' . $details . '");</script>';
+        $message = '<script>alert(" การเพิ่มลงตะกร้าล้มเหลว: ' . $details . '");</script>';
     }
 }
 // --- จบส่วนจัดการข้อความแจ้งเตือน (Query Strings) ---
@@ -127,12 +136,13 @@ $paid_courses_result = mysqli_query($conn,
     "SELECT b.id AS booking_id, t.id AS course_id, t.subject, t.price, t.name AS tutor_name, t.picture
      FROM bookings b
      JOIN tutor_courses t ON b.tutor_id = t.id
-     WHERE b.user_id = $user_id AND b.status = 'paid'
+     WHERE b.user_id = $user_id AND b.status = 'paid' AND b.status != 'cancelled'
      ORDER BY b.payment_date DESC");
 
 
-// --- ส่วนจัดการหมวดหมู่ (แก้ไขปัญหาซ้ำซ้อน) ---
-$category_sql = "SELECT DISTINCT category FROM tutor_courses WHERE category IS NOT NULL AND category != '' ORDER BY category ASC";
+// --- ส่วนจัดการหมวดหมู่ (แก้ไขปัญหาซ้ำซ้อนและเพิ่มรายการที่หายไป) ---
+// 1. ดึงหมวดหมู่จากตาราง categories ของ admin เป็นหลัก
+$category_sql = "SELECT DISTINCT name AS category FROM categories ORDER BY name ASC";
 $category_result = mysqli_query($conn, $category_sql);
 $categories = []; 
 
@@ -141,12 +151,22 @@ if ($category_result && mysqli_num_rows($category_result) > 0) {
     while ($cat = mysqli_fetch_assoc($category_result)) {
         $categories[] = trim($cat['category']);
     }
+} else {
+    // 2. ถ้าไม่มีตาราง categories หรือไม่มีข้อมูล ให้ดึงจาก tutor_courses (แบบเดิม)
+    $category_sql_fallback = "SELECT DISTINCT category FROM tutor_courses WHERE category IS NOT NULL AND category != '' ORDER BY category ASC";
+    $category_result_fallback = mysqli_query($conn, $category_sql_fallback);
+    if ($category_result_fallback) {
+         while ($cat = mysqli_fetch_assoc($category_result_fallback)) {
+            $categories[] = trim($cat['category']);
+        }
+    }
 }
-// รายการสำรอง 
+
+// 3. รายการสำรอง (เพิ่มรายการที่ขาดไปกลับมา)
 $fallback_cats = [
-    'คณิตศาสตร์',        
-    'วิทยาศาสตร์',       
-    'สังคมศาสตร์',        
+    'คณิตศาสตร์', 
+    'วิทยาศาสตร์', 
+    'สังคมศาสตร์', 
     'คอมพิวเตอร์', 
     'ทำอาหาร', 
     'ศิลปะ',
@@ -156,10 +176,11 @@ $fallback_cats = [
     'บริหารการจัดการ', 
     'ออกกำลังกาย', 
     'กราฟฟิก', 
-    'การช่าง'
+    'การช่าง' // <--- "การช่าง" อยู่ที่นี่
 ];
-// แก้ไข: ใช้ array_unique เพื่อให้แน่ใจว่าไม่ซ้ำกันหลังจากดึงจาก DB
-$categories = array_unique(array_merge($categories, $fallback_cats));
+
+// แก้ไข: ใช้ array_unique เพื่อให้แน่ใจว่าไม่ซ้ำกัน
+$categories = array_unique(array_filter(array_merge($categories, $fallback_cats)));
 
 $count_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM bookings WHERE user_id=$user_id AND status='pending'");
 $count_row = mysqli_fetch_assoc($count_result);
@@ -170,7 +191,7 @@ function getCategoryIcon($category) {
     if (strpos($category, 'คณิตศาสตร์') !== false) return 'fa-calculator'; 
     elseif (strpos($category, 'วิทยาศาสตร์') !== false) return 'fa-flask';
     elseif (strpos($category, 'สังคมศาสตร์') !== false) return 'fa-user-friends';
-    elseif (strpos($category, 'การช่าง') !== false) return 'fa-wrench';
+    elseif (strpos($category, 'การช่าง') !== false) return 'fa-wrench'; // <--- ไอคอนสำหรับ "การช่าง"
     elseif (strpos($category, 'ภาษา') !== false) return 'fa-globe-asia';
     elseif (strpos($category, 'ดนตรี') !== false) return 'fa-music';
     elseif (strpos($category, 'ศิลปะ') !== false) return 'fa-palette';
@@ -179,8 +200,7 @@ function getCategoryIcon($category) {
     elseif (strpos($category, 'ออกกำลังกาย') !== false) return 'fa-dumbbell';
     elseif (strpos($category, 'กราฟฟิก') !== false) return 'fa-vector-square';
     elseif (strpos($category, 'เสริมสวย') !== false) return 'fa-spa';
-    elseif (strpos($category, 'บริหารการจัดการ') !== false) return 'fa-chart-line';
-    elseif (strpos($category, 'ธุรกิจ') !== false || strpos($category, 'บริหาร') !== false) return 'fa-briefcase';
+    elseif (strpos($category, 'บริหารการจัดการ') !== false || strpos($category, 'ธุรกิจ') !== false) return 'fa-briefcase';
     else return 'fa-book-open';
 }
 ?>
@@ -245,6 +265,15 @@ h2 { color: #333; font-weight: 600; margin-bottom: 25px; padding-left: 10px; bor
 .category-box:hover { background: #2e427f; transform: scale(1.03); }
 .category-icon-main { font-size: 2.5rem; margin-bottom: 10px; }
 .category-title { font-size: 1.1rem; color: white; font-weight: 600; }
+/* CSS สำหรับ Admin Link */
+.admin-link { 
+    color: #ffeb3b !important; 
+    font-weight: 700; 
+    margin-right: 10px; 
+}
+.admin-link:hover {
+    color: #ffd600 !important; 
+}
 </style>
 </head>
 
@@ -257,7 +286,13 @@ h2 { color: #333; font-weight: 600; margin-bottom: 25px; padding-left: 10px; bor
         <h1>LearnHub</h1>
     </div>
     <div class="right">
-        <span>👋 สวัสดี, <?= htmlspecialchars($username); ?></span>
+        <?php if ($role === 'admin'): // ลิงก์ไปยังหน้าแอดมิน (admin.php) ?>
+            <a href="admin.php" class="admin-link" title="หน้าจัดการระบบแอดมิน">
+                <i class="fa-solid fa-screwdriver-wrench"></i> จัดการระบบ
+            </a>
+        <?php endif; ?>
+        
+        <span> สวัสดี, <?= htmlspecialchars($username); ?></span>
         <a href="student_profile.php" class="profile-icon" title="แก้ไขข้อมูลส่วนตัว">
             <i class="fa-solid fa-user"></i>
         </a>
@@ -280,7 +315,7 @@ h2 { color: #333; font-weight: 600; margin-bottom: 25px; padding-left: 10px; bor
         </form>
     </div>
     
-    <h2>📚 คอร์สที่ฉันกำลังเรียน</h2>
+    <h2> คอร์สที่ฉันกำลังเรียน</h2>
 
     <div class="courses-grid">
         <?php if ($paid_courses_result && mysqli_num_rows($paid_courses_result) > 0): ?>
@@ -327,7 +362,7 @@ h2 { color: #333; font-weight: 600; margin-bottom: 25px; padding-left: 10px; bor
             }
         }
     ?>
-    <h2>✨ <?= $display_title; ?></h2>
+    <h2> <?= $display_title; ?></h2>
 
     <div class="courses-grid">
         <?php if ($courses_result && mysqli_num_rows($courses_result) > 0): ?>
@@ -359,7 +394,7 @@ h2 { color: #333; font-weight: 600; margin-bottom: 25px; padding-left: 10px; bor
         <?php endif; ?>
     </div>
 
-    <h2>🎯 ค้นหาตามหมวดหมู่</h2>
+    <h2> ค้นหาตามหมวดหมู่</h2>
     
     <div class="categories-grid">
         <?php foreach ($categories as $category_name): 
